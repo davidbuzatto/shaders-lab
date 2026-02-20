@@ -26,6 +26,8 @@
 
 static Shader hsvShader;
 static Shader mandelbrotShader;
+static Shader kishimisuTutorialShader;
+
 static int hueAdjust = 0;
 
 static float minReal = MIN_REAL;
@@ -44,6 +46,7 @@ static bool startAutomaticZoom = false;
 static void zoomIn( void );
 static void hsvShaderTest( void );
 static void mandelbrotShaderTest( void );
+static void kishimisuTutorialShaderTest( void );
 
 /**
  * @brief Creates a dinamically allocated GameWorld struct instance.
@@ -55,6 +58,7 @@ GameWorld* createGameWorld( void ) {
 
     hsvShader = LoadShader( NULL, "resources/shaders/hsvShader.fs" );
     mandelbrotShader = LoadShader( NULL, "resources/shaders/mandelbrotShader.fs" );
+    kishimisuTutorialShader = LoadShader( NULL, "resources/shaders/kishimisuTutorialShader.fs" );
 
     return gw;
 
@@ -125,8 +129,9 @@ void drawGameWorld( GameWorld *gw ) {
     BeginDrawing();
     ClearBackground( BLACK );
 
-    mandelbrotShaderTest();
     //hsvShaderTest();
+    //mandelbrotShaderTest();
+    kishimisuTutorialShaderTest();
 
     EndDrawing();
 
@@ -205,6 +210,33 @@ void mandelbrotShaderTest( void ) {
     SetShaderValue( mandelbrotShader, maxImgLoc, &maxImg, SHADER_UNIFORM_FLOAT );
 
     BeginShaderMode( mandelbrotShader );
+    DrawRectangle( 0, 0, GetScreenWidth(), GetScreenHeight(), WHITE );
+    EndShaderMode();
+
+}
+
+void kishimisuTutorialShaderTest( void ) {
+
+    float mouseX = GetMouseX();
+    float mouseY = GetMouseY();
+    float screenWidth = GetScreenWidth();
+    float screenHeight = GetScreenHeight();
+
+    int mouseXLoc = GetShaderLocation( kishimisuTutorialShader, "mouseX" );
+    int mouseYLoc = GetShaderLocation( kishimisuTutorialShader, "mouseY" );
+    int screenWidthLoc = GetShaderLocation( kishimisuTutorialShader, "screenWidth" );
+    int screenHeightLoc = GetShaderLocation( kishimisuTutorialShader, "screenHeight" );
+    int timeLoc = GetShaderLocation( kishimisuTutorialShader, "time" );
+
+    float time = (float) GetTime();
+
+    SetShaderValue( kishimisuTutorialShader, mouseXLoc, &mouseX, SHADER_UNIFORM_FLOAT );
+    SetShaderValue( kishimisuTutorialShader, mouseYLoc, &mouseY, SHADER_UNIFORM_FLOAT );
+    SetShaderValue( kishimisuTutorialShader, screenWidthLoc, &screenWidth, SHADER_UNIFORM_FLOAT );
+    SetShaderValue( kishimisuTutorialShader, screenHeightLoc, &screenHeight, SHADER_UNIFORM_FLOAT );
+    SetShaderValue( kishimisuTutorialShader, timeLoc, &time, SHADER_UNIFORM_FLOAT );
+
+    BeginShaderMode( kishimisuTutorialShader );
     DrawRectangle( 0, 0, GetScreenWidth(), GetScreenHeight(), WHITE );
     EndShaderMode();
 
